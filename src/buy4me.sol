@@ -6,10 +6,10 @@ contract greeter {
     address public vendeur;
     uint public montant;
 
-    function greeter(address _vendeur) payable {
+    function greeter(address _vendeur, uint value) payable {
         owner = msg.sender;
         vendeur = _vendeur;
-        montant = msg.value;
+        montant = value;
     }
 
     function() payable {
