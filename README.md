@@ -1,2 +1,7 @@
-https://dapp.readthedocs.io/en/latest/installation.html
-https://dapp.readthedocs.io/en/latest/unit_testing.html
+# Unit testing
+
+1. utiliser cat-blockchain-dev pour lancer une blockchain de dév
+
+2. lancer un mineur
+
+3. utiliser solc-tools pour compiler HelloWorldContract.sol
