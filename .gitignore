@@ -1,2 +1,4 @@
-out
-lib
+out/
+build/
+node_modules/
+lib/

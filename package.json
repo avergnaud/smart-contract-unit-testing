@@ -11,7 +11,9 @@
     "chai": "^4.0.2"
   },
   "scripts": {
-    "test": "babel-node --presets es2015 test/unit-test.js"
+    "pretest" :"docker run -d --name test -p 8080:8545 -v ~/mapped-data:/mytestdir registry.gitlab.com/cat-hackathon-microservices/cat-blockchain-dev && docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
+    "test": "babel-node --presets es2015 test/unit-test.js",
+    "posttest": "docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && docker kill test && docker rm test"
   },
   "author": "",
   "license": "ISC"
