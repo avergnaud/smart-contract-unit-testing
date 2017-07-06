@@ -12,7 +12,7 @@ Test.getInstance('HelloWorld')
             .method(helloWorld.set)
             .params('Totochabo')
             .eventToWatch(helloWorld.ReturnValue)
-            .build();
+            .send();
 
     })
     .then(function(contract){

@@ -93,7 +93,7 @@ let transactionBuilder = function () {
             thisEventToWatch = passedEventToWatch;
             return this;
         },
-        build: function () {
+        send: function () {
 
             return new Promise(function (onSuccess, onError) {
 
