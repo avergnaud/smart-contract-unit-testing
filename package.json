@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "web3": "*" 
+    "express": "^4.15.3",
+    "web3": "*"
   },
   "devDependencies": {
     "babel-cli": "6.24.1",
@@ -11,12 +12,12 @@
     "chai": "^4.0.2"
   },
   "scripts": {
-    "build":"docker run -it --name solc-tools --volume ~/buy4me-contract:/src registry.gitlab.com/cat-hackathon-microservices/solc-tools:latest solc --bin --abi --overwrite --gas -o ./build ./src/*.sol",
+    "build": "docker run -it --name solc-tools --volume ~/buy4me-contract:/src registry.gitlab.com/cat-hackathon-microservices/solc-tools:latest solc --bin --abi --overwrite --gas -o ./build ./src/*.sol",
     "postbuild": "docker rm solc-tools",
-    
-    "pretest" :"docker run -d --name test -p 8080:8545 -v ~/mapped-data:/mytestdir registry.gitlab.com/cat-hackathon-microservices/cat-blockchain-dev && docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
+    "pretest": "docker run -d --name test -p 8080:8545 -v ~/mapped-data:/mytestdir registry.gitlab.com/cat-hackathon-microservices/cat-blockchain-dev && docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
     "test": "babel-node --presets es2015 test/unit-test.js",
-    "posttest": "docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && docker kill test && docker rm test"
+    "posttest": "docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && docker kill test && docker rm test",
+    "server": "node server.js"
   },
   "author": "",
   "license": "ISC"
