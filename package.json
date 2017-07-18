@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "dependencies": {
-    "express": "^4.15.3",
     "web3": "*"
   },
   "devDependencies": {
@@ -12,12 +11,15 @@
     "chai": "^4.0.2"
   },
   "scripts": {
-    "build": "docker run -it --name solc-tools --volume ~/buy4me-contract:/src registry.gitlab.com/cat-hackathon-microservices/solc-tools:latest solc --bin --abi --overwrite --gas -o ./build ./src/*.sol",
-    "postbuild": "docker rm solc-tools",
-    "pretest": "docker run -d --name test -p 8080:8545 -v ~/mapped-data:/mytestdir registry.gitlab.com/cat-hackathon-microservices/cat-blockchain-dev && docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
-    "test": "babel-node --presets es2015 test/unit-test.js",
-    "posttest": "docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && docker kill test && docker rm test",
-    "server": "node server.js"
+    "//": "npm run build : à faire une seule fois - enfin pour compiler...",
+    "build": "sudo docker run -it --name solc-tools --volume /home/ubuntu/hackaton/buy4me-contract:/buy4me-contract-mapped solc-tools:latest solc --bin --abi --overwrite --gas -o ./build src/Escrow.sol",
+    "//": "npm run pretest",
+    "//": "sudo docker logs test -f",
+    "//": "npm run test-unitaire (attendre la fin de la génération du DAG)",
+    "//": "npm run posttest",
+    "pretest": "sudo docker run -d --name test -p 8080:8545 -v /home/ubuntu/hackaton/cat-blockchain-dev/mapped-data:/mytestdir blockchain-dev && sudo docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
+    "test-unitaire": "babel-node --presets es2015 test/unit-test.js",
+    "posttest": "sudo docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && sudo docker kill test && sudo docker rm test"
   },
   "author": "",
   "license": "ISC"

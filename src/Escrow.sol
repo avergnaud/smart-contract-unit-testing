@@ -1,18 +1,24 @@
-contract escrow{
+pragma solidity ^0.4.0;
+
+contract escrow {
 
   mapping (address => uint) balances;
 
   address public seller;
   address public buyer;
-  address escrow = msg.sender;
+  address escrow = msg.sender;/* sender lors de la création du contrat */
   bool sellerApprove;
   bool buyerApprove;
 
-  function setup(address seller, address buyer){
-    if(msg.sender == escrow){
-        seller = seller;
-        buyer = buyer;
+  /* setup */
+  event SetupEvent(bool setupByOwner);
+  
+  function setup(address sellerParam, address buyerParam){
+    if(msg.sender == escrow) {
+        seller = sellerParam;
+        buyer = buyerParam;
     }
+    SetupEvent(msg.sender == escrow);
   }
 
   function approve(){
@@ -47,7 +53,7 @@ contract escrow{
   }
 
   function fee(){
-      escrow.send(this.balance / 100); //1% fee
+      escrow.send(this.balance / 1000); //0.1% fee
       payOut();
   }
 
