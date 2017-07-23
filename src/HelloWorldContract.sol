@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-contract HelloWorld {
+contract HelloWorldContract {
 
     string public word = "first word";
 

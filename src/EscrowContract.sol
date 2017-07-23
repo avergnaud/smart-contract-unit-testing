@@ -1,6 +1,6 @@
 pragma solidity ^0.4.0;
 
-contract escrow {
+contract EscrowContract {
 
   mapping (address => uint) balances;
 
@@ -12,7 +12,7 @@ contract escrow {
 
   /* setup */
   event SetupEvent(bool setupByOwner);
-  
+
   function setup(address sellerParam, address buyerParam){
     if(msg.sender == escrow) {
         seller = sellerParam;
