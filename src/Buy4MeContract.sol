@@ -148,14 +148,17 @@ contract Buy4MeContract {
     SettleEvent(sentAmount, recipient);
   }
 
+  event RetrieveBalanceEvent();
   /* 5. Buy4Me solde le compte */
-  event KillContractEvent(uint reclaimedFunds);
+  function retrieveBalance() estBuy4me {
+      buy4me.transfer(this.balance);
+      RetrieveBalanceEvent();
+  }
+
+  /* 6. Buy4Me solde le compte */
   function killContract() estBuy4me {
-      uint remainingBalance = this.balance;
       //pays buy4me :
       selfdestruct(buy4me);
-      //kills contract and returns funds to buy4me :
-      KillContractEvent(remainingBalance);
   }
 
 }

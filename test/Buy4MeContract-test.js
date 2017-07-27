@@ -137,7 +137,23 @@ Test.getInstance("Buy4MeContract", web3.eth.accounts[3])
       .send();
   })
   .then(function(buy4MeContract) {
-    console.log("7. on check les funds");
+
+    console.log("7. Buy4Me récupère son solde");
+
+    /* je suis buy4me */
+    web3.personal.unlockAccount(web3.eth.accounts[3], "my-password");
+
+    return new Test.transactionBuilder()
+      .contract(buy4MeContract)
+      .method(buy4MeContract.retrieveBalance)
+      .from(web3.eth.accounts[3])
+      .gas(1000000)/* nécessaire ? */
+      .eventToWatch(buy4MeContract.RetrieveBalanceEvent)
+      .send();
+  })
+  .then(function(buy4MeContract) {
+
+    console.log("8. on check les funds");
 
     /* TODO asserts */
 
