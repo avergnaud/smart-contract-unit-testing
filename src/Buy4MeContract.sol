@@ -50,41 +50,44 @@ contract Buy4MeContract {
     _;
   }
 
-  /* getters et setters pour les paramètres du contrat */
+  /* getters pour les paramètres du contrat */
   function getCommissionBuy4Me() public constant returns(uint returnValue) {
     return commissionBuy4Me;
-  }
-  function setCommissionBuy4Me(uint comissionBuy4MeParam) public estBuy4me {
-    commissionBuy4Me = comissionBuy4MeParam;
   }
   function getPenaliteAnnulationAcheteurFinal() public constant returns(uint returnValue) {
     return penaliteAnnulationAcheteurFinal;
   }
-  function setPenaliteAnnulationAcheteurFinal(uint penaliteAnnulationAcheteurFinalParam) public estBuy4me {
-    penaliteAnnulationAcheteurFinal = penaliteAnnulationAcheteurFinalParam;
-  }
   function getCautionMinimalePrestataire() public constant returns(uint returnValue) {
     return cautionMinimalePrestataire;
   }
-  function setCautionMinimalePrestataire(uint cautionMinimalePrestataireParam) public estBuy4me {
-    cautionMinimalePrestataire = cautionMinimalePrestataireParam;
+
+  /* getters pour les fonds présents */
+  function getFunds(address adresse) public constant returns(uint returnValue) {
+    return funds[adresse];
   }
 
   event SetupEvent();
   /* C'est le wallet applicatif qui doit appeler cette méthode */
-  function setup(address prestataireParam, address acheteurFinalParam) estBuy4me {
+  function setup(address prestataireParam, address acheteurFinalParam, 
+                  uint comissionBuy4MeParam, uint penaliteAnnulationAcheteurFinalParam, 
+                  uint cautionMinimalePrestataireParam) estBuy4me {
     prestataire = prestataireParam;
     acheteurFinal = acheteurFinalParam;
+    commissionBuy4Me = comissionBuy4MeParam;
+    penaliteAnnulationAcheteurFinal = penaliteAnnulationAcheteurFinalParam;
+    cautionMinimalePrestataire = cautionMinimalePrestataireParam;
     SetupEvent();
   }
 
   /* 1. Chaque partie prenante dépose son argent */
-  event DepositEvent(uint depositedAmount, address from);
+  event DepositEvent();
   function deposit() estPartiePrenante payable {
     /* msg.value is in wei */
     if (msg.value <= 0) throw;
+    if (prestataire == msg.sender && msg.value < cautionMinimalePrestataire) throw;
+
     funds[msg.sender] += msg.value;
-    DepositEvent(msg.value, msg.sender);
+    DepositEvent();
   }
 
   /* 2. La transaction physique a eu lieu. L'acheteur final valide ou pas */

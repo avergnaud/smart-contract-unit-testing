@@ -12,7 +12,7 @@ web3.personal.unlockAccount(web3.eth.accounts[0], "my-password");
 const BUILD_DIR = resolve(process.env.PWD + "/build") + "/";
 
 /* insert a contract in the blockchain from the binaries */
-let getInstance = function(contractName, ...constructorParams) {
+let getInstance = function(contractName, fromAccount, ...constructorParams) {
   // contract files
   let contractBinFileName = BUILD_DIR + contractName + ".bin";
   let contractAbiFileName = BUILD_DIR + contractName + ".abi";
@@ -32,6 +32,7 @@ let getInstance = function(contractName, ...constructorParams) {
       .then(function(contractAbiReturned) {
         contractAbi = JSON.parse(contractAbiReturned);
         return newContract(
+          fromAccount,
           contractAbi,
           contractBin,
           "4700000",
@@ -51,6 +52,7 @@ let getInstance = function(contractName, ...constructorParams) {
 
 /* (local method) inserts contract */
 let newContract = function(
+  fromAccount,
   contractAbi,
   contractBin,
   gasValue,
@@ -64,7 +66,7 @@ let newContract = function(
     let contractInstance = contractInitiator.new(
       ...constructorParams,
       {
-        from: web3.eth.accounts[0],
+        from: fromAccount,
         data: "0x" + contractBin,
         gas: gasValue
       },
@@ -79,11 +81,18 @@ let newContract = function(
   });
 };
 
-/* (builder pattern) send transaction and watch for event */
+/* (builder pattern) send transaction and watch for event 
+
+TODO : fromAccount
+
+*/
 let transactionBuilder = function() {
   let thisContract;
   let thisMethod;
-  let thisParams;
+  let thisMethodParams;
+  let thisFrom;
+  let thisGas;
+  let thisValue;
   let thisEventToWatch;
 
   return {
@@ -96,7 +105,19 @@ let transactionBuilder = function() {
       return this;
     },
     params: function(...passedParams) {
-      thisParams = passedParams;
+      thisMethodParams = passedParams;
+      return this;
+    },
+    from: function(passedFrom) {
+      thisFrom = passedFrom;
+      return this;
+    },
+    gas: function(passedGas /* ! */) {
+      thisGas = passedGas;
+      return this;
+    },
+    value: function(passedValue) {
+      thisValue = passedValue;
       return this;
     },
     eventToWatch: function(passedEventToWatch) {
@@ -104,9 +125,15 @@ let transactionBuilder = function() {
       return this;
     },
     send: function() {
+
+      let transactionParams = {};
+      if(thisFrom) transactionParams.from = thisFrom;
+      if(thisGas) transactionParams.gas = thisGas;
+      if(thisValue) transactionParams.value = thisValue;
+
       return new Promise(function(onSuccess, onError) {
         // start watching before sending the transaction - avoids overlapping
-        let theEvent = thisEventToWatch({ _from: web3.eth.accounts[0] });
+        let theEvent = thisEventToWatch({ _from: thisFrom });
         theEvent.watch(function(err, result) {
           if (err) {
             onError(err);
@@ -114,9 +141,11 @@ let transactionBuilder = function() {
           theEvent.stopWatching();
           onSuccess(thisContract);
         });
-        thisMethod.sendTransaction(...thisParams, {
-          from: web3.eth.accounts[0]
-        });
+        if(thisMethodParams) {
+          thisMethod.sendTransaction(...thisMethodParams, transactionParams);
+        } else {
+          thisMethod.sendTransaction(transactionParams);
+        }
       });
     }
   };
