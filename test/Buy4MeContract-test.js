@@ -62,6 +62,29 @@ Test.getInstance("Buy4MeContract", web3.eth.accounts[3])
     );
 
     console.log(
+      "2.bis saisie d'une description à valeur légale..."
+    );
+
+    /* je suis le prestataire */
+    web3.personal.unlockAccount(web3.eth.accounts[2], "my-password");
+
+    return new Test.transactionBuilder()
+      .contract(buy4MeContract)
+      .method(buy4MeContract.setDescription)
+      .params("je vais te ramener une télé 36 pouces 3D SMART TV 4K de ouf")
+      .from(web3.eth.accounts[2])
+      .gas(4000000)
+      .eventToWatch(buy4MeContract.SetDescriptionEvent)
+      .send();
+  })
+  .then(function(buy4MeContract) {
+    assert.equal(
+      buy4MeContract.getDescription(),
+      "je vais te ramener une télé 36 pouces 3D SMART TV 4K de ouf",
+      "ERR : description KO"
+    );
+
+    console.log(
       "3. le prestataire dépose sa caution : " +
         web3.fromWei(cautionPrestataire, "ether") +
         " ETH"
@@ -99,12 +122,13 @@ Test.getInstance("Buy4MeContract", web3.eth.accounts[3])
       .contract(buy4MeContract)
       .method(buy4MeContract.deposit)
       .from(web3.eth.accounts[1])
-      .gas(1000000)
+      .gas(2000000)
       .value(prixConvenu)
       .eventToWatch(buy4MeContract.DepositEvent)
       .send();
   })
   .then(function(buy4MeContract) {
+
     assert.equal(
       buy4MeContract.getFunds(web3.eth.accounts[1]),
       prixConvenu,
@@ -137,7 +161,6 @@ Test.getInstance("Buy4MeContract", web3.eth.accounts[3])
       .send();
   })
   .then(function(buy4MeContract) {
-
     console.log("7. Buy4Me récupère son solde");
 
     /* je suis buy4me */
@@ -147,12 +170,11 @@ Test.getInstance("Buy4MeContract", web3.eth.accounts[3])
       .contract(buy4MeContract)
       .method(buy4MeContract.retrieveBalance)
       .from(web3.eth.accounts[3])
-      .gas(1000000)/* nécessaire ? */
+      .gas(1000000) /* nécessaire ? */
       .eventToWatch(buy4MeContract.RetrieveBalanceEvent)
       .send();
   })
   .then(function(buy4MeContract) {
-
     console.log("8. on check les funds");
 
     /* TODO asserts */

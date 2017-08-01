@@ -11,15 +11,8 @@
     "chai": "^4.0.2"
   },
   "scripts": {
-    "//": "npm run build : à faire une seule fois - enfin pour compiler...",
-    "build": "sudo docker run -it --name solc-tools --volume /home/ubuntu/hackaton/buy4me-contract:/buy4me-contract-mapped solc-tools:latest solc --bin --abi --overwrite --gas -o ./build src/Escrow.sol",
-    "//": "npm run pretest",
-    "//": "sudo docker logs test -f",
-    "//": "npm run test-unitaire (attendre la fin de la génération du DAG)",
-    "//": "npm run posttest",
-    "pretest": "sudo docker run -d --name test -p 8080:8545 -v /home/ubuntu/hackaton/cat-blockchain-dev/mapped-data:/mytestdir blockchain-dev && sudo docker exec -it test geth attach http://localhost:8545 --exec 'miner.start()'",
-    "test-unitaire": "babel-node --presets es2015 test/unit-test.js",
-    "posttest": "sudo docker exec -it test geth attach http://localhost:8545 --exec 'miner.stop()' && sudo docker kill test && sudo docker rm test"
+    "build": "sudo docker run -it --name solc-tools --volume /home/ubuntu/hackaton/buy4me-contract:/buy4me-contract-mapped solc-tools:latest solc --bin --abi --overwrite --gas -o ./build src/Buy4MeContract.sol",
+    "test-unitaire": "babel-node --presets es2015 test/Buy4MeContract-test.js"
   },
   "author": "",
   "license": "ISC"

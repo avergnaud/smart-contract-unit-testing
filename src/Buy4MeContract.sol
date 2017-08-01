@@ -3,7 +3,6 @@ pragma solidity ^0.4.0;
 /*
 http://solidity.readthedocs.io/en/develop/security-considerations.html
 https://github.com/ConsenSys/smart-contract-best-practices
-TODO v2 : uploader la preuve d'achat dans la blockchain
 */
 contract Buy4MeContract {
 
@@ -26,6 +25,9 @@ contract Buy4MeContract {
   bool validationAcheteurFinal;
   /* settlement done : */
   bool settlementDone;
+
+  /* description à valeur contractuelle - code civil */
+  string description;
 
   /* constructeur */
   function Buy4MeContract() {
@@ -77,6 +79,19 @@ contract Buy4MeContract {
     penaliteAnnulationAcheteurFinal = penaliteAnnulationAcheteurFinalParam;
     cautionMinimalePrestataire = cautionMinimalePrestataireParam;
     SetupEvent();
+  }
+
+  event SetDescriptionEvent();
+  function setDescription(string nouvelleDescription) public estPartiePrenante {
+    /* si l'acheteur final a déjà validé, on ne peut plus modifier la description */
+    if(validationAcheteurFinal) throw;
+
+    description = nouvelleDescription;
+    SetDescriptionEvent();
+  }
+
+  function getDescription() public constant returns(string returnValue) {
+    return description;
   }
 
   /* 1. Chaque partie prenante dépose son argent */
