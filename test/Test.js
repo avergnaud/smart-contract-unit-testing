@@ -3,7 +3,8 @@ const Web3 = require("web3");
 const filesystem = require("./FileSystem");
 
 // requieres cat-blockchain-dev up
-const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+// const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.HttpProvider("http://vps437796.ovh.net:8081"));
 
 /* "my-password" defined in cat-blockchain-dev/src/passwordFile.txt */
 web3.personal.unlockAccount(web3.eth.accounts[0], "my-password");
@@ -138,6 +139,7 @@ let transactionBuilder = function() {
           if (err) {
             onError(err);
           }
+          // console.log('transaction event received : ' + theEvent);
           theEvent.stopWatching();
           onSuccess(thisContract);
         });
