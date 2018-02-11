@@ -1,0 +1,19 @@
+{
+  "name": "buy4me-unit-testing",
+  "version": "1.0.0",
+  "description": "",
+  "dependencies": {
+    "web3": "*"
+  },
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-preset-es2015": "6.24.1",
+    "chai": "^4.0.2"
+  },
+  "scripts": {
+    "build": "sudo docker run -it --name solc-tools --volume /home/ubuntu/hackaton/buy4me-contract:/buy4me-contract-mapped solc-tools:latest solc --bin --abi --overwrite --gas -o ./build src/Buy4MeContract.sol",
+    "test-unitaire": "babel-node --presets es2015 test/Buy4MeContract-test.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

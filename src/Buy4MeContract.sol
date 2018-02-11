@@ -70,8 +70,8 @@ contract Buy4MeContract {
 
   event SetupEvent();
   /* C'est le wallet applicatif qui doit appeler cette méthode */
-  function setup(address prestataireParam, address acheteurFinalParam, 
-                  uint comissionBuy4MeParam, uint penaliteAnnulationAcheteurFinalParam, 
+  function setup(address prestataireParam, address acheteurFinalParam,
+                  uint comissionBuy4MeParam, uint penaliteAnnulationAcheteurFinalParam,
                   uint cautionMinimalePrestataireParam) estBuy4me {
     prestataire = prestataireParam;
     acheteurFinal = acheteurFinalParam;
